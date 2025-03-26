@@ -6,12 +6,12 @@ Mini Apps are web apps built with HTML, CSS, and JavaScript that integrate with
 Farcaster clients using an SDK and publish metadata that Farcaster clients use
 to surface them as applications.
 
-## Automatic Installation
+## Automatic Setup
 
 For new projects, you can use setup an app using the
 [@farcaster/create-mini-app](https://github.com/farcasterxyz/frames/tree/main/packages/create-mini-app)
-CLI. This will create a new project using TypeScript and install the required
-dependencies.
+CLI. This will create a new project using [Vite](https://vite.dev/) React and
+TypeScript and install the required dependencies.
 
 :::code-group
 
@@ -27,13 +27,18 @@ pnpm add @farcaster/mini-app
 yarn add @farcaster/mini-app
 ```
 
+
+If you're looking for something 
 :::
 
-:::note
-This will create a simple [Vite](https://vite.dev/) project with React and
-Typescript. You can use whatever your favorite web framework is to build Mini
-Apps, if this isn't your cup of tea proceed to Manual Installation.
-:::
+If you're looking for something more opionated, check out the
+[create-neynar-farcaster-frame](https://github.com/neynarxyz/create-neynar-farcaster-frame)
+tool that uses Next and includes a backend, dynamic image generation, and
+integration with Neynar.
+
+Remember, you can use whatever your favorite web framework is to build Mini
+Apps so if these options aren't appealing you can setup the SDK in your own
+project by following the instructions below.
 
 
 ## Manual Installation
