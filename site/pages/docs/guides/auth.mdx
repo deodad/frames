@@ -6,4 +6,21 @@ section_title: Guide
 
 # Authenticating users
 
-TODO
+An app can use the [signIn](/docs/actions/signIn) to get a [Sign in with
+Farcaster (SIWF)] authentication credential for the user.
+
+In cases where the Farcaster client (i.e. on mobile) has direct access the
+user's signing key (e.g. their custody account) this credential can be produced
+silently without the user needing to take any action. Otherwise the user will
+prompted to sign in.
+
+After requesting the credential, applications can verify it on their server
+using
+[verifySignInMessage](https://docs.farcaster.xyz/auth-kit/client/app/verify-sign-in-message).
+Apps can then issue a session token like a JWT that can be used for the
+remainder of the session. 
+
+Session tokens should be kept in memory but not persisted in Local Storage or
+Cookies. Since users are signing in through their Farcaster client their
+expectation will be if they sign out of the their Farcaster client they'll be
+signed out of any Mini Apps as well.
