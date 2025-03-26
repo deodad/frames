@@ -82,10 +82,6 @@ export default defineConfig({
             link: '/docs/context',
           },
           {
-            text: 'Wallet',
-            link: '/docs/wallet',
-          },
-          {
             text: 'Actions',
             collapsed: true,
             items: [
@@ -114,6 +110,10 @@ export default defineConfig({
                 link: '/docs/actions/close',
               },
             ],
+          },
+          {
+            text: 'Wallet',
+            link: '/docs/wallet',
           },
           {
             text: 'Events',
