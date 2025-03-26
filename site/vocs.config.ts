@@ -69,6 +69,10 @@ export default defineConfig({
             link: '/docs/guides/notifications',
           },
           {
+            text: 'Receiving webhooks',
+            link: '/docs/guides/webhooks',
+          },
+          {
             text: 'Authenticating users',
             link: '/docs/guides/auth',
           },

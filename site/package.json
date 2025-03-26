@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@farcaster/frame-core": "workspace:*",
+    "@farcaster/frame-node": "workspace:*",
     "@farcaster/frame-sdk": "workspace:*",
     "@farcaster/frame-wagmi-connector": "workspace:*",
     "react": "latest",

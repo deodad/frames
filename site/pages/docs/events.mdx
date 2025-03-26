@@ -1,197 +1,37 @@
 ---
-title: Events
+title: Client Events
+description: Receive events when users change their settings for your app
 ---
 
-# Events
+# Client Events
 
-When a user interacts with your app events will be sent from the host to your
-application client and server.
+When a user interacts with your app events will be sent from the Farcaster
+client to your application client.
 
 
-## Client Events
-
-Farcaster clients emit events to directly to your app client while it is open,
-to let you know of actions the user takes.
+Farcaster clients emit events to directly to your app client while it is open that can 
+be used to update your UI in response to user actions.
 
 To listen to events, you have to use `sdk.on` to register callbacks ([see full
 example](https://github.com/farcasterxyz/frames-v2-demo/blob/20d454f5f6b1e4f30a6a49295cbd29ca7f30d44a/src/components/Demo.tsx#L92-L124)).
 
-```ts
-sdk.on('frameAdded', ({ notificationDetails }) => {
-  setLastEvent(
-    `frameAdded${!!notificationDetails ? ', notifications enabled' : ''}`
-  );
+Listeners can be cleaned up with `sdk.removeListener()` or sdk.removeAllListners()`.
 
-  setAdded(true);
-  if (notificationDetails) {
-    setNotificationDetails(notificationDetails);
-  }
-});
-```
+## Events
 
-Ensure that on unmount/close, all the listeners are removed via
-`sdk.removeAllListeners()`.
+### frameAdded
 
-Here are the callback definitions:
+The user added the Mini App.
 
-```ts
-export type EventMap = {
-  frameAdded: ({
-    notificationDetails,
-  }: {
-    notificationDetails?: FrameNotificationDetails;
-  }) => void;
-  frameAddRejected: ({ reason }: { reason: AddFrameRejectedReason }) => void;
-  frameRemoved: () => void;
-  notificationsEnabled: ({
-    notificationDetails,
-  }: {
-    notificationDetails: FrameNotificationDetails;
-  }) => void;
-  notificationsDisabled: () => void;
-};
-```
+### frameRemoved
 
-The emitted events are:
+The user removed the Mini App.
 
-- `frameAdded`, same as the `frame_added` webhook
-- `frameAddRejected`, frontend-only, emitted when the frame has triggered the
-`addFrame` action and the frame was not added. Reason is the same as in the
-return value of `addFrame`.
-- `frameRemoved`, same as the `frame_removed` webhook
-- `notificationsEnabled`, same as the `notifications_enabled` webhook
-- `notificationsDisabled`, same as the `notifications_disabled` webhook
+### notificationsEnabled
 
+The user enabled notifications after previously having them disabled.
 
-## Server Events
+### notificationsDisabled
 
-The Farcaster client server POSTs 4 types of events to the frame server at the
-`webhookUrl` specified in its frame manifest:
+The user disabled notifications.
 
-- `frame_added`
-- `frame_removed`
-- `notifications_enabled`
-- `notifications_disabled`
-
-The body looks like this:
-
-Events use the [JSON Farcaster
-Signature](https://github.com/farcasterxyz/protocol/discussions/208) format and
-are signed with the app key of the user. The final format is:
-
-```
-{
-  header: string;
-  payload: string;
-  signature: string;
-}
-```
-
-All 3 values are `base64url` encoded. The payload and header can be decoded to
-JSON, where the payload is different per event.
-
-### `frame_added`: frame added to a client
-
-This event may happen when an open frame calls `actions.addFrame` to prompt the
-user to favorite it, or when the frame is closed and the user adds the frame
-elsewhere in the client application (e.g. from a catalog).
-
-Adding a frame includes enabling notifications.
-
-The Farcaster app server generates a unique `notificationToken` and sends it
-together with the `notificationUrl` that the frame must call, to both the
-Farcaster app client and the frame server. Client apps must generate unique
-tokens for each user.
-
-The app client then resolves the `actions.addFrame` promise so the frame can
-react immediately (without having to check its server).
-
-This is the flow for an open frame:
-
-![Screenshot 2024-11-26 at 16 02
-24](https://github.com/user-attachments/assets/00a79f2e-265b-4ec1-831f-28b3a2a6b6de)
-
-This is the flow when the frame is not open; only the backend part runs:
-
-![Screenshot 2024-11-26 at 16 02
-35](https://github.com/user-attachments/assets/aae4d453-92f7-46c0-a44f-b0597e58fa43)
-
-Webhook payload:
-
-```json
-{
-  "event": "frame-added",
-  "notificationDetails": {
-    "url": "https://api.warpcast.com/v1/frame-notifications",
-    "token": "a05059ef2415c67b08ecceb539201cbc6"
-  }
-}
-```
-
-```ts
-type EventFrameAddedPayload = {
-  event: 'frame_added';
-  notificationDetails?: FrameNotificationDetails;
-};
-```
-
-### `frame_removed`: user removed frame from client
-
-A user can remove a frame, which means that any notification tokens for that
-fid and client app (based on signer requester) should be considered invalid:
-
-![Screenshot 2024-11-26 at 16 02
-40](https://github.com/user-attachments/assets/079dfb74-77e4-47c8-b2e7-1b4628d1f162)
-
-Webhook payload:
-
-```
-{
-  "event": "frame-removed"
-}
-```
-
-### `notifications_disabled`: user disabled notifications
-
-A user can disable frame notifications from e.g. a settings panel in the client
-app. Any notification tokens for that fid and client app (based on signer
-requester) should be considered invalid:
-
-![Screenshot 2024-11-26 at 16 03
-04](https://github.com/user-attachments/assets/bcca0f58-3656-4a8c-bff8-8feda97bdc54)
-
-Webhook payload:
-
-```json
-{
-  "event": "notifications_disabled"
-}
-```
-
-### `notifications_enabled`: user enabled notifications
-
-A user can enable frame notifications (e.g. after disabling them). The client
-backend again sends a `notificationUrl` and a `token`, with a backend-only
-flow:
-
-![Screenshot 2024-11-26 at 16 02
-48](https://github.com/user-attachments/assets/3ead1768-2efc-4785-9d4a-3a399f2dd0e6)
-
-Webhook payload:
-
-```
-{
-  "event": "notifications-enabled",
-  "notificationDetails": {
-    "url": "https://api.warpcast.com/v1/frame-notifications",
-    "token": "a05059ef2415c67b08ecceb539201cbc6"
-  }
-}
-```
-
-```ts
-type EventNotificationsEnabledPayload = {
-  event: 'notifications_enabled';
-  notificationDetails: FrameNotificationDetails;
-};
-```

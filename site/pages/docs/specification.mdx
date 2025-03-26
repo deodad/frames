@@ -877,7 +877,7 @@ export type EventMap = {
 The emitted events are:
 
 - `frameAdded`, same as the `frame_added` webhook
-- `frameAddRejected`, frontend-only, emitted when the frame has triggered the `addFrame` action and the frame was not added. Reason is the same as in the return value of `addFrame`.
+- `frameAddRejected`, frontend-only, emitted when the frame has triggered the `addFrame` action and the frame was not added. Reason is the same as in the return value of `addFrame`. Deprecated in favor of rejected promise, will be removed in a future version.
 - `frameRemoved`, same as the `frame_removed` webhook
 - `notificationsEnabled`, same as the `notifications_enabled` webhook
 - `notificationsDisabled`, same as the `notifications_disabled` webhook

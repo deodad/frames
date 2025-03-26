@@ -1,0 +1,154 @@
+---
+title: Receiving webhooks
+section_title: Guides
+---
+
+# Receiving webhooks
+
+Users can add and configure notification settings Mini Apps within their
+Farcaster client. When this happens Farcaster clients will send events your
+server that include data relevant to the event.
+
+This allows your app to:
+- keep track of what users have added or removed your app
+- securely receive tokens that can be used to send notifications to your users
+
+:::note
+If you'd rather stay focused on your app, [Neynar](https://neynar.com) offers a
+[managed service to handle
+webhooks](https://docs.neynar.com/docs/send-notifications-to-frame-users#step-1-add-events-webhook-url-to-frame-manifest)
+on behalf of your application.
+:::
+
+## Events
+
+### frame_added
+
+Sent when the user adds the frame to their Farcaster client (whether or not
+this was triggered by an `addFrame()` prompt).
+
+The optional `notificationDetails` object provides the `token` and `url` if the
+client equates adding to enabling notifications (Warpcast does this).
+
+#### Payload
+
+```json
+{
+  "event": "frame_added",
+  "notificationDetails": {
+    "url": "https://api.warpcast.com/v1/frame-notifications",
+    "token": "a05059ef2415c67b08ecceb539201cbc6"
+  }
+}
+```
+
+### frame_removed
+
+Sent when a user removes a frame, which means that any notification tokens for
+that fid and client app (based on signer requester) should be considered
+invalid:
+
+#### Payload
+
+```json
+{
+  "event": "frame_removed"
+}
+```
+
+### notifications_disabled
+
+Sent when a user disables frame notifications from e.g. a settings panel in the
+client app. Any notification tokens for that fid and client app (based on
+signer requester) should be considered invalid:
+
+#### Payload
+
+```json
+{
+  "event": "notifications_disabled"
+}
+```
+
+### notifications_enabled
+
+Sent when a user enables frame notifications (e.g. after disabling them, or if
+this is a separate step from adding a frame to the client). The payload
+includes a new `token` and `url`:
+
+#### Payload
+
+```json
+{
+  "event": "notifications_enabled",
+  "notificationDetails": {
+    "url": "https://api.warpcast.com/v1/frame-notifications",
+    "token": "a05059ef2415c67b08ecceb539201cbc6"
+  }
+}
+```
+
+## Handling events
+
+Farcaster clients will POST events to the `webhookUrl` specified in your `farcaster.json`.
+
+Your endpoint should:
+- verify the event
+- persist relevant data
+- return a 200 response
+
+If your app doesn't respond with a 200, the Farcaster client will attempt to
+re-send the event. The exact number of retries is up to each client.
+
+## Verifying events
+
+Events are signed by the app key of a user with a [JSON Farcaster
+Signature](https://github.com/farcasterxyz/protocol/discussions/208). This allows
+Mini Apps to verify the Farcaster client that generated the notification and the 
+Farcaster user they generated it for. 
+
+The
+[`@farcaster/frame-node`](https://github.com/farcasterxyz/frames/tree/main/packages/frame-node)
+library provides a helper for verifying events. To use it, you'll need to supply a validation
+function that can check the signatures against the latest Farcaster network state.
+
+An implementation that uses [Neynar](https://neynar.com) is provided. You can sign up and get
+an API key on their free tier. Make sure to set `NEYNAR_API_KEY` environment variable.
+
+### Example
+
+```ts twoslash
+const requestJson = "base64encodeddata";
+
+// ---cut---
+import {
+  ParseWebhookEvent,
+  parseWebhookEvent,
+  verifyAppKeyWithNeynar,
+} from "@farcaster/frame-node";
+
+try {
+  const data = await parseWebhookEvent(requestJson, verifyAppKeyWithNeynar);
+} catch (e: unknown) {
+  const error = e as ParseWebhookEvent.ErrorType;
+
+  switch (error.name) {
+    case "VerifyJsonFarcasterSignature.InvalidDataError":
+    case "VerifyJsonFarcasterSignature.InvalidEventDataError":
+      // The request data is invalid
+    case "VerifyJsonFarcasterSignature.InvalidAppKeyError":
+      // The app key is invalid
+    case "VerifyJsonFarcasterSignature.VerifyAppKeyError":
+      // Internal error verifying the app key (caller may want to try again)
+  }
+}
+```
+
+## Reference implementation
+
+For a complete example, check out the [Frames V2 Demo
+](https://github.com/farcasterxyz/frames-v2-demo) has all of the above:
+
+- [Handles webhooks](https://github.com/farcasterxyz/frames-v2-demo/blob/main/src/app/api/webhook/route.ts) leveraging the [`@farcaster/frame-node`](https://github.com/farcasterxyz/frames/tree/main/packages/frame-node) library that makes this very easy
+- [Saves notification tokens to Redis](https://github.com/farcasterxyz/frames-v2-demo/blob/main/src/lib/kv.ts)
+- [Sends notifications](https://github.com/farcasterxyz/frames-v2-demo/blob/main/src/lib/notifs.ts)
