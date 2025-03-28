@@ -54,7 +54,7 @@ The string literal `'next'`.
 The URL of the image that should be displayed. 
 
 - the image will be displayed at 3:2 aspect ratio.
-- the image less than 10MB
+- the image must be less than 10MB
 - The URL must be \<= 512 characters
 
 
@@ -124,13 +124,13 @@ const frame = {
 You can use the [Embed Debug Tool](https://warpcast.com/~/developers/mini-apps/embed) in Warpcast to preview a embed.
 
 :::note
-If you are using localhost
+If you are using localhost, you'll need to make your server publicly accessible (e.g., using a tool like ngrok) for the debug tool to access your embed.
 :::
 
 
 ## Caching
 
-Since embeds are shared feeds, they are generally scraped once and cached so
+Since embeds are shared in feeds, they are generally scraped once and cached so
 that they can be efficiently served in the feeds of hundreds or thousands
 users.
 
@@ -165,7 +165,7 @@ Even though the  data attached to a specific cast is static, a dynamic
 image can be served using tools like Next.js
 [Next ImageResponse](https://nextjs.org/docs/app/api-reference/functions/image-response).
 
-For example, we could create an embed that shows shows the current price of ETH. We'd
+For example, we could create an embed that shows the current price of ETH. We'd
 set the `imageUrl` to a static URL like `https://example.xyz/eth-price.png`. When a request
 is made to this endpoint we'd:
 
@@ -183,7 +183,7 @@ image in their feed while the dynamic image is generated. You'll also quickly
 rack up a huge bill from your servie provider. The exact time depends on your
 application but opt for the longest time that still keeps the image reasonably
 fresh. If you're needing freshness less than a minute you should reconsider 
-your design or be prepared to operate a high performance endpoint.
+your design or be prepared to operate a high-performance endpoint.
 
 Here's some more reading if you're interested in doing this:
 - [Vercel Blog - Fast, dynamic social card images at the Edge](https://vercel.com/blog/introducing-vercel-og-image-generation-fast-dynamic-social-card-images)
