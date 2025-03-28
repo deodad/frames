@@ -32,7 +32,7 @@ export type FrameContext = {
 
 ### `location`
 
-Contains information about the context from which the frame was launched.
+Contains information about the context from which the Mini App was launched.
 
 ```ts
 export type CastEmbedLocationContext = {
@@ -86,7 +86,7 @@ export type LocationContext =
 
 #### Cast Embed
 
-Indicates that the frame was launched from a cast (where it is an embed).
+Indicates that the Mini App was launched from a cast (where it is an embed).
 
 ```ts
 > sdk.context.location
@@ -101,7 +101,7 @@ Indicates that the frame was launched from a cast (where it is an embed).
 
 #### Notification
 
-Indicates that the frame was launched from a notification triggered by the frame.
+Indicates that the Mini App was launched from a notification triggered by the frame.
 
 ```ts
 > sdk.context.location
@@ -117,7 +117,7 @@ Indicates that the frame was launched from a notification triggered by the frame
 
 #### Launcher
 
-Indicates that the frame was launched directly by the client app outside of a context, e.g. via some type of catalog or a notification triggered by the client.
+Indicates that the Mini App was launched directly by the client app outside of a context, e.g. via some type of catalog or a notification triggered by the client.
 
 ```ts
 > sdk.context.location
@@ -184,10 +184,10 @@ type User = {
 
 ### client
 
-Details about the Farcaster client running the frame. This should be considered untrusted
+Details about the Farcaster client running the Mini App. This should be considered untrusted
 
 - `clientFid`: the self-reported FID of the client (e.g. 9152 for Warpcast)
-- `added`: whether the user has added the frame to the client
+- `added`: whether the user has added the Mini App to the client
 - `safeAreaInsets`: insets to avoid areas covered by navigation elements that obscure the view
 - `notificationDetails`: in case the user has enabled notifications, includes the `url` and `token` for sending notifications
 
@@ -248,7 +248,7 @@ type ClientContext = {
 
 #### Using safeAreaInsets
 
-Mobile devices render navigation elements that obscure the view of a frame. Use
+Mobile devices render navigation elements that obscure the view of an app. Use
 the `safeAreaInsets` to render content in the safe area that won't be obstructed.
 
 A basic usage would to wrap your view in a container that adds margin:
@@ -260,12 +260,12 @@ A basic usage would to wrap your view in a container that adds margin:
   marginLeft: context.client.safeAreaInsets.left,
   marginRight: context.client.safeAreaInsets.right,
 }}>
-  ...your frame view
+  ...your app view
 </div>
 ```
 
 However, you may want to set these insets on specific elements: for example if
-you have tab bar at the bottom of your frame with a different background, you'd
+you have tab bar at the bottom of your app with a different background, you'd
 want to set the bottom inset as padding there so it looks attached to the
 bottom of the view.
 
