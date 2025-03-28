@@ -1,12 +1,22 @@
+---
+title: Getting Started
+section_title: Guide
+description: Get started building Mini Apps
+---
+
 # Getting Started
+
+import { Caption } from '../../components/Caption';
 
 ## Overview
 
-Mini Apps are web apps built with HTML, CSS, and JavaScript that integrate with
-Farcaster clients using an SDK and publish metadata that Farcaster clients use
-to surface them as applications.
+Mini apps are web apps built with HTML, CSS, and Javascript that can be discovered
+and used within Farcaster clients. You can use an SDK to access native
+Farcaster features, like authentication, sending notifications, and interacting
+with the user's wallet. 
 
-## Automatic Setup
+
+## Quick Start
 
 For new projects, you can use setup an app using the
 [@farcaster/create-mini-app](https://github.com/farcasterxyz/frames/tree/main/packages/create-mini-app)
@@ -32,7 +42,7 @@ Apps so if these options aren't appealing you can setup the SDK in your own
 project by following the instructions below.
 
 
-## Manual Installation
+## Manual Setup
 
 For existing projects, install the Frames SDK:
 
@@ -68,6 +78,7 @@ the bottom of your HTML file with the following content.
 </script>
 ```
 
+
 ## Using the SDK
 
 ### Calling ready
@@ -92,6 +103,38 @@ Let's preview it in Warpcast:
 1. Open the [Warpcast Frame Developer Tools](https://warpcast.com/~/developers/frames) on desktop
 2. Enter your web app url in _Frame URL_ in the **Preview Frame** tool
 3. Hit _Preview_
+
+
+## Building with AI
+
+These docs are LLM friendly so that you use the latest models to build your
+applications.
+
+1. Use the Ask in ChaptGPT buttons available on each page to interact with the
+that page in 
+
+<video autoPlay muted playsInline loop>
+  <source src="/ask_in_chatgpt.mp4" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
+
+2. Use the <a class="vocs_Anchor vocs_Link vocs_Link_accent" href="/llms-full.txt">llms-full.txt</a> to keep your LLM up to date with these docs:
+
+<picture>
+  <img alt="setup mini app docs in cursor" src="/cursor-setup.png" width="auto" />
+</picture>
+
+<br/>
+
+<Caption>
+  Adding the Mini App docs to Cursor
+</Caption>
+
+### How does this work?
+
+This entire site is converted into a single markdown doc that can fit inside
+the context window of most LLMs. See [The /llms.txt file](https://llmstxt.org/)
+standards proposal for more information.
 
 ## Next Steps
 

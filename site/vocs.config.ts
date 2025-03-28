@@ -43,22 +43,14 @@ export default defineConfig({
             text: 'Getting Started',
             link: '/docs/getting-started',
           },
-          {
-            text: 'LLMs',
-            link: '/docs/llms',
-          },
         ],
       },
       {
         text: 'Guides',
         items: [
           {
-            text: 'Publishing your app',
-            link: '/docs/guides/publishing',
-          },
-          {
-            text: 'Sharing your app',
-            link: '/docs/guides/sharing',
+            text: 'Loading your app',
+            link: '/docs/guides/loading',
           },
           {
             text: 'Interacting with wallets',
@@ -69,8 +61,12 @@ export default defineConfig({
             link: '/docs/guides/notifications',
           },
           {
-            text: 'Receiving webhooks',
-            link: '/docs/guides/webhooks',
+            text: 'Publishing your app',
+            link: '/docs/guides/publishing',
+          },
+          {
+            text: 'Sharing your app',
+            link: '/docs/guides/sharing',
           },
           {
             text: 'Authenticating users',

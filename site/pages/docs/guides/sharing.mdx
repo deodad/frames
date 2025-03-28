@@ -8,33 +8,34 @@ import { Caption } from '../../../components/Caption';
 
 # Sharing your app
 
-Mini Apps can be shared in social feeds using special embeds called Frames that
-let users interact with an app directly from their feed.
+Mini Apps can be shared in social feeds using special embeds that let users
+interact with an app directly from their feed.
 
-Each URL in your application can be turned into a Frame by adding meta tags to
-it that specify an image and action, similar to how Open Graph tags work.
+Each URL in your application can be made embeddable by adding meta tags to it
+that specify an image and action, similar to how Open Graph tags work.
 
 For example:
-- a personality quiz app can let users share a personalized Frame with their results
-- an NFT marketplace can let users share a Frame for each listing
-- a prediction market app can let users share a Frame for each market
+- a personality quiz app can let users share a personalized embed with their results
+- an NFT marketplace can let users share an embed for each listing
+- a prediction market app can let users share an embed for each market
 
-![sharing an app in a social feed with a Frame](/share_frame_preview.png)
+![sharing an app in a social feed with a embed](/share_frame_preview.png)
 
 <Caption>
   A viral loop: user discovers app in feed → uses app → shares app in feed
 </Caption>
 
-## Making a page sharable
+
+## Sharing a page in your app
 
 Add a meta tag in the `<head>` section of the page you want to make
-sharable specifying the Frame metadata:
+sharable specifying the embed metadata:
 
 ```html
 <meta name="fc:frame" content="<stringified FrameEmbed JSON>" />
 ```
 
-When a user shares the URL with your Frame on it in a Farcaster client, the
+When a user shares the URL with your embed on it in a Farcaster client, the
 Farcaster client will fetch the HTML, see the `fc:frame` meta tag, and use it
 to render a rich card.
 
@@ -120,18 +121,21 @@ const frame = {
 
 ## Debugging 
 
-You can use the [Warpcast Frame Debug
-Tool](https://warpcast.com/~/developers/frames) to preview a Frame.
+You can use the [Embed Debug Tool](https://warpcast.com/~/developers/apps/embed) in Warpcast to preview a embed.
+
+:::note
+If you are using localhost
+:::
 
 
 ## Caching
 
-Since Frames are shared feeds, they are generally scraped once and cached so
+Since embeds are shared feeds, they are generally scraped once and cached so
 that they can be efficiently served in the feeds of hundreds or thousands
 users.
 
-This means that when a URL gets shared, the Frame data present at that time
-will be attached to the cast and won't be updated even if the Frame data at
+This means that when a URL gets shared, the embed data present at that time
+will be attached to the cast and won't be updated even if the embed data at
 that URL gets changed.
 
 
@@ -141,27 +145,27 @@ that URL gets changed.
 2. User copies URL and embeds it in a cast.
 3. Farcaster client fetches the URL and attaches the frame metadata to the cast.
 4. Farcaster client injects the cast + embed + attached metadata into thousands of feeds.
-5. User sees cast in feed with a Frame rendered from the attached metadata.
+5. User sees cast in feed with an embed rendered from the attached metadata.
 
 
 ## Next steps
 
-Now that you know how to create Frames for your app, think about how you'll get
+Now that you know how to create embeds for your app, think about how you'll get
 users to share them in feed. For instance, you can create a call-to-action once
-a user takes an action in your app to share a Frame in a cast.
+a user takes an action in your app to share a embed in a cast.
 
-At the very least you'll want to setup a Frame for the root URL of your application.
+At the very least you'll want to setup a embed for the root URL of your application.
 
 
 ## Advanced Topics 
 
-### Dynamic Frame images
+### Dynamic Embed images
 
-Even though the Frame data attached to a specific cast is static, a dynamic
+Even though the  data attached to a specific cast is static, a dynamic
 image can be served using tools like Next.js
 [Next ImageResponse](https://nextjs.org/docs/app/api-reference/functions/image-response).
 
-For example, we could create a Frame that shows shows the current price of ETH. We'd
+For example, we could create an embed that shows shows the current price of ETH. We'd
 set the `imageUrl` to a static URL like `https://example.xyz/eth-price.png`. When a request
 is made to this endpoint we'd:
 
