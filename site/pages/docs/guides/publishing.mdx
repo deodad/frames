@@ -3,6 +3,8 @@ title: Publishing
 description: Guide to publishing Farcaster Mini Apps.
 ---
 
+import { Caption } from '../../../components/Caption';
+
 # Publishing your app
 
 Publishing Mini Apps involves providing information like who developed the app,
@@ -11,6 +13,12 @@ how it should be displayed, and what its capabilities are.
 Since Farcaster is a decentralized network with multiple clients, publishing is
 done by hosting a file at `/.well-known/farcaster.json` on the domain your app
 is hosted on rather than submitting information directly to single entity.
+
+![](/explore-preview.png)
+
+<Caption>
+  Published Mini Apps can be discovered in App Stores.
+</Caption>
 
 
 ## Choosing a domain
@@ -48,8 +56,8 @@ This data is also provided in `farcaster.json`.
 ## Generating `farcaster.json`
 
 You can generate both the verification and profile compoents of this file
-including the signature using the [Warpcast Mini App Developer
-Tool](https://warpcast.com/~/developers/frames). 
+including the signature using the [Farcaster JSON
+Tool](https://warpcast.com/~/developers/mini-apps/manifest) in Warpcast. 
 
 Take the generated file and host it on your domain at
 `/.well-known/farcaster.json`.
